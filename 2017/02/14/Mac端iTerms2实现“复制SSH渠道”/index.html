@@ -1,57 +1,170 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-  <title>Mac端iTerms2实现“复制SSH渠道” | BlackTimmy</title>
-  <meta name="description" content="" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="MobileOptimized" content="320" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
+    
+    <title>Mac端iTerms2实现“复制SSH渠道” | BlackTimmy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="MacBook" />
+    
+    <meta name="description" content="在Mac端实现类似Xshell中的右键“复制SSH渠道”功能，以避免每次在Mac端登录跳板机后新开窗口需要重复输入PIN+TOKEN的问题。">
+<meta name="keywords" content="MacBook">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac端iTerms2实现“复制SSH渠道”">
+<meta property="og:url" content="http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/index.html">
+<meta property="og:site_name" content="BlackTimmy">
+<meta property="og:description" content="在Mac端实现类似Xshell中的右键“复制SSH渠道”功能，以避免每次在Mac端登录跳板机后新开窗口需要重复输入PIN+TOKEN的问题。">
+<meta property="og:image" content="http://blog-pic.qiniudn.com/17-2-14/58029075-file_1487052499319_ae90.jpg">
+<meta property="og:updated_time" content="2017-05-09T15:28:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mac端iTerms2实现“复制SSH渠道”">
+<meta name="twitter:description" content="在Mac端实现类似Xshell中的右键“复制SSH渠道”功能，以避免每次在Mac端登录跳板机后新开窗口需要重复输入PIN+TOKEN的问题。">
+<meta name="twitter:image" content="http://blog-pic.qiniudn.com/17-2-14/58029075-file_1487052499319_ae90.jpg">
+    
 
-  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
-  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
+    
+        <link rel="alternate" href="/" title="BlackTimmy" type="application/atom+xml" />
+    
 
-  <meta name="generator" content="BlackTimmy">
+    
 
-  
-  
-  
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/titillium-web/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
 
-  
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+
 </head>
 
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Technology/">Technology</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
 
-<body class="post-template">
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
 
-  <header class="site-head"  style="background-image: url(//blog.ghost.org/content/images/2013/Nov/cover.png)" >
-    <div class="vertical">
-        <div class="site-head-content inner">
-             <a class="blog-logo" href="/"><img src="//blog.ghost.org/content/images/2013/Nov/bloglogo_1-1.png" alt="Blog Logo"/></a> 
-            <h1 class="blog-title">BlackTimmy</h1>
-            <h2 class="blog-description"></h2>
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </header>
-  
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Technology/">Technology</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-Mac端iTerms2实现“复制SSH渠道”" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Mac端iTerms2实现“复制SSH渠道”
+        </h1>
+    
 
-<main class="content" role="main">
-  <article class="post">
-    <span class="post-meta">
-      <time datetime="2017-02-14T03:30:30.000Z" itemprop="datePublished">
-          2017-02-14
-      </time>
-    
-    
-    | 
-    <a href='/tags/MacBook/'>MacBook</a>
-    
-    
-</span>
-    <h1 class="post-title">Mac端iTerms2实现“复制SSH渠道”</h1>
-    <section class="post-content">
-      <p><img src="http://blog-pic.qiniudn.com/17-2-14/58029075-file_1487052499319_ae90.jpg" alt=""><br>本人在公司工作的时候使用的是Windows系统，在Windows系统下使用的软件是Xshell来登录跳板机。Xshell这个终端模拟软件的使用十分方便，建立了链接后，输入PIN+TOKEN即可成功链接，登录了跳板机之后，只需要右键当前窗口选择“复制SSH渠道”，即可实现复制当前登录的跳板机窗口。</p>
+            </header>
+        
+        
+            <div class="article-meta">
+                
+    <div class="article-date">
+        <a href="/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/" class="article-date">
+            <time datetime="2017-02-14T03:30:30.000Z" itemprop="datePublished">2017-02-14</time>
+        </a>
+    </div>
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/MacBook/">MacBook</a>
+    </div>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p><img src="http://blog-pic.qiniudn.com/17-2-14/58029075-file_1487052499319_ae90.jpg" alt=""><br>本人在公司工作的时候使用的是Windows系统，在Windows系统下使用的软件是Xshell来登录跳板机。Xshell这个终端模拟软件的使用十分方便，建立了链接后，输入PIN+TOKEN即可成功链接，登录了跳板机之后，只需要右键当前窗口选择“复制SSH渠道”，即可实现复制当前登录的跳板机窗口。</p>
 <p>Xsehll的方便之处在于只连接一次跳板机，之后就可以右键“复制SSH渠道”即可新打开一个链接好跳板机的窗口，不需要重复输入PIN+TOKEN，而Mac的终端并没有这样的功能。</p>
 <p>下面来说一下如何在Mac终端里实现“复制SSH渠道”的功能：<br>首先说明一下，在Mac上我用的是iTerms2代替了终端，因为：</p>
 <ul>
@@ -70,68 +183,379 @@
 <p>5、然后使用快捷键 cmd+t 打开新的窗口，然后 fn+F1 将快捷命令输出的屏幕上，回车！你就会看到已经登录的跳板机！是不是比右键“复制会话”还要快呢！嘻嘻！</p>
 <p>原理很简单，开一个ssh连接在后台放着，以后再有需要用到ssh到同样主机的时候，直接使用这个连接的socket文件，不用再创建连接了，同理，也不需要再进行用户身份验证。</p>
 
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/" data-id="cj2likcue00047owvdfq5jyre" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+
+    
     </section>
-    <footer class="post-footer">
-      <section class="author">
-    <h4>BlackTimmy</h4>
-    <p>A designer, developer and entrepreneur. Spends his time travelling the world with a bag of kites. Likes journalism and publishing platforms.</p>
-</section>
-      <section class="share">
-    <h4>Share this post</h4>
-    <a class="icon-twitter" href="http://twitter.com/share?url=http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/"
-       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
-        <span class="hidden">Twitter</span>
-    </a>
-    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/"
-       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
-        <span class="hidden">Facebook</span>
-    </a>
-    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/"
-       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
-        <span class="hidden">Google+</span>
-    </a>
-</section>
-    </footer>
-  </article>
-  <nav class="pagination" role="pagination">
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="google-plus" href="/" target="_blank">
+                        <i class="icon fa fa-google-plus"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/ppoffice/hexo-theme-hueman" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
     
-    <a class="newer-posts" href="/2017/02/23/Linux-netstat命令/">
-        ← Linux netstat命令
+        
+<nav id="article-nav">
+    
+        <a href="/2017/02/23/Linux-netstat命令/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">下一篇</strong>
+        <p class="article-nav-title">
+        
+            Linux netstat命令
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
     </a>
     
-    <span class="page-number">•</span>
     
-    <a class="older-posts" href="/2017/02/09/识别当前运行的是哪种shell/">
-        识别当前运行的是哪种shell →
-    </a>
+        <a href="/2017/02/09/识别当前运行的是哪种shell/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">上一篇</strong>
+        <p class="article-nav-title">识别当前运行的是哪种shell</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
     
 </nav>
-  <div id="comment" class="comments-area">
-    <h1 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h1>
 
     
-</div>
-</main>
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/05/09/Mac日式键盘的问题/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://blog-pic.qiniudn.com/17-2-10/20803520-file_1486715028193_b5fe.jpg)" alt="Mac日式键盘的问题" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/05/09/Mac日式键盘的问题/" class="title">Mac日式键盘的问题</a></p>
+                            <p class="item-date"><time datetime="2017-05-09T03:57:06.000Z" itemprop="datePublished">2017-05-09</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/02/23/Linux-netstat命令/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://blog-pic.qiniudn.com/17-5-12/83032757-file_1494573573880_f24b.jpg)" alt="Linux netstat命令" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/02/23/Linux-netstat命令/" class="title">Linux netstat命令</a></p>
+                            <p class="item-date"><time datetime="2017-02-23T04:00:54.000Z" itemprop="datePublished">2017-02-23</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://blog-pic.qiniudn.com/17-2-14/58029075-file_1487052499319_ae90.jpg)" alt="Mac端iTerms2实现“复制SSH渠道”" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/" class="title">Mac端iTerms2实现“复制SSH渠道”</a></p>
+                            <p class="item-date"><time datetime="2017-02-14T03:30:30.000Z" itemprop="datePublished">2017-02-14</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/02/09/识别当前运行的是哪种shell/" class="thumbnail">
+    
+    
+        <span style="background-image:url(http://blog-pic.qiniudn.com/17-2-22/74637677-file_1487768790491_c105.jpg)" alt="识别当前运行的是哪种shell" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Technology/">Technology</a></p>
+                            <p class="item-title"><a href="/2017/02/09/识别当前运行的是哪种shell/" class="title">识别当前运行的是哪种shell</a></p>
+                            <p class="item-date"><time datetime="2017-02-09T02:59:04.000Z" itemprop="datePublished">2017-02-09</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Technology/">Technology</a><span class="category-list-count">4</span></li></ul>
+        </div>
+    </div>
 
 
-  
-<footer class="site-footer">
-  
-  <div class="inner">
-     <section class="copyright">All content copyright <a href="/">BlackTimmy</a> &copy; 2014 &bull; All rights reserved.</section>
-     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/">Hexo</a></section>
-  </div>
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">3</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MacBook/">MacBook</a><span class="tag-list-count">2</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/MacBook/" style="font-size: 10px;">MacBook</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2017 BlackTimmy</p>
+                <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+            </div>
+        </div>
+    </div>
 </footer>
+        
+    
+    <script>
+    var disqus_shortname = 'hexo-theme-hueman';
+    
+    
+    var disqus_url = 'http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/';
+    
+    (function() {
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
-<script type="text/javascript" src="/js/index.js"></script>
 
 
 
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
 
 
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
 
+    </div>
 </body>
 </html>
