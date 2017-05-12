@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>Mac端iTerms2实现“复制SSH渠道” | BlackTimmy</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
+
+  <meta name="generator" content="BlackTimmy">
+
+  
+  
+  
+
+  
+</head>
+
+
+<body class="post-template">
+
+  <header class="site-head"  style="background-image: url(//blog.ghost.org/content/images/2013/Nov/cover.png)" >
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="//blog.ghost.org/content/images/2013/Nov/bloglogo_1-1.png" alt="Blog Logo"/></a> 
+            <h1 class="blog-title">BlackTimmy</h1>
+            <h2 class="blog-description"></h2>
+        </div>
+    </div>
+</header>
+  
+
+<main class="content" role="main">
+  <article class="post">
+    <span class="post-meta">
+      <time datetime="2017-02-14T03:30:30.000Z" itemprop="datePublished">
+          2017-02-14
+      </time>
+    
+    
+    | 
+    <a href='/tags/MacBook/'>MacBook</a>
+    
+    
+</span>
+    <h1 class="post-title">Mac端iTerms2实现“复制SSH渠道”</h1>
+    <section class="post-content">
+      <p><img src="http://blog-pic.qiniudn.com/17-2-14/58029075-file_1487052499319_ae90.jpg" alt=""><br>本人在公司工作的时候使用的是Windows系统，在Windows系统下使用的软件是Xshell来登录跳板机。Xshell这个终端模拟软件的使用十分方便，建立了链接后，输入PIN+TOKEN即可成功链接，登录了跳板机之后，只需要右键当前窗口选择“复制SSH渠道”，即可实现复制当前登录的跳板机窗口。</p>
+<p>Xsehll的方便之处在于只连接一次跳板机，之后就可以右键“复制SSH渠道”即可新打开一个链接好跳板机的窗口，不需要重复输入PIN+TOKEN，而Mac的终端并没有这样的功能。</p>
+<p>下面来说一下如何在Mac终端里实现“复制SSH渠道”的功能：<br>首先说明一下，在Mac上我用的是iTerms2代替了终端，因为：</p>
+<ul>
+<li>iTerm2 比 Mac 默认的 Terminal 终端好用，配合 Zsh 效果更棒哦!</li>
+<li>iTerm2下载连接：<a href="http://www.iterm2.com/" target="_blank" rel="external">http://www.iterm2.com/</a></li>
+<li>选择iTerms2配色方案：<a href="https://github.com/altercation/solarized" target="_blank" rel="external">https://github.com/altercation/solarized</a></li>
+</ul>
+<p>本人使用的是Argonaut，效果大概是下面这样子的：<br><img src="http://blog-pic.qiniudn.com/17-2-14/89060624-file_1487051673527_10c3d.png" alt=""></p>
+<p>言归正传，在iTerms2中使用以下命令可以正常登录跳板机：<br>ssh username@host -p 36000<br>但是存在的弊病就是每次新开一个窗口就得重新输入PIN+TOKEN来登录跳板机。</p>
+<p>如何实现类似Xshell的“复制SSH渠道”功能呢？<br>1、首先，保证这个目录的存在<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mkdir -p ~/.ssh/cm_socket</div></pre></td></tr></table></figure></p>
+<p>2、创建配置文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">vi ~/.ssh/cm_socket/config</div></pre></td></tr></table></figure></p>
+<p>3、编辑config配置文件为以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Host *</div><div class="line">ControlMaster auto</div><div class="line">ControlPath ~/.ssh/cm_socket/%r@%h:%p</div></pre></td></tr></table></figure></p>
+<p>4、重启终端</p>
+<p>·注意点：如果没有奏效可能还需要对iTerms2做以下设置：Preference——Profiles——WorkingDirectory；选择reuse previous sessions’s directory</p>
+<p>至此，第一次登录跳板机输入密码后，之后新开窗口登录跳板机就都不再需要密码了。这里还有技巧就是可以用快捷键cmd+t来新建会话窗口，然后设置一个快捷键来send一条命令来登录机器：例如设置fn+F1为一个快捷键，来实现向屏幕输出登录命令：ssh username@host -p 36000<br><img src="http://blog-pic.qiniudn.com/17-2-14/20063619-file_1487051336985_1386c.png" alt=""></p>
+<p>5、然后使用快捷键 cmd+t 打开新的窗口，然后 fn+F1 将快捷命令输出的屏幕上，回车！你就会看到已经登录的跳板机！是不是比右键“复制会话”还要快呢！嘻嘻！</p>
+<p>原理很简单，开一个ssh连接在后台放着，以后再有需要用到ssh到同样主机的时候，直接使用这个连接的socket文件，不用再创建连接了，同理，也不需要再进行用户身份验证。</p>
+
+    </section>
+    <footer class="post-footer">
+      <section class="author">
+    <h4>BlackTimmy</h4>
+    <p>A designer, developer and entrepreneur. Spends his time travelling the world with a bag of kites. Likes journalism and publishing platforms.</p>
+</section>
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" href="http://twitter.com/share?url=http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://yoursite.com/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+    </footer>
+  </article>
+  <nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2017/02/23/Linux-netstat命令/">
+        ← Linux netstat命令
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2017/02/09/识别当前运行的是哪种shell/">
+        识别当前运行的是哪种shell →
+    </a>
+    
+</nav>
+  <div id="comment" class="comments-area">
+    <h1 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h1>
+
+    
+</div>
+</main>
+
+
+  
+<footer class="site-footer">
+  
+  <div class="inner">
+     <section class="copyright">All content copyright <a href="/">BlackTimmy</a> &copy; 2014 &bull; All rights reserved.</section>
+     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/">Hexo</a></section>
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+
+</body>
+</html>

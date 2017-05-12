@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" >
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <title>Linux netstat命令 | BlackTimmy</title>
+  <meta name="description" content="" />
+  <meta name="HandheldFriendly" content="True" />
+  <meta name="MobileOptimized" content="320" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" type="text/css" href="/css/screen.css" />
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Noto+Serif:400,700,400italic|Open+Sans:700,400" />
+
+  <meta name="generator" content="BlackTimmy">
+
+  
+  
+  
+
+  
+</head>
+
+
+<body class="post-template">
+
+  <header class="site-head"  style="background-image: url(//blog.ghost.org/content/images/2013/Nov/cover.png)" >
+    <div class="vertical">
+        <div class="site-head-content inner">
+             <a class="blog-logo" href="/"><img src="//blog.ghost.org/content/images/2013/Nov/bloglogo_1-1.png" alt="Blog Logo"/></a> 
+            <h1 class="blog-title">BlackTimmy</h1>
+            <h2 class="blog-description"></h2>
+        </div>
+    </div>
+</header>
+  
+
+<main class="content" role="main">
+  <article class="post">
+    <span class="post-meta">
+      <time datetime="2017-02-23T04:00:54.000Z" itemprop="datePublished">
+          2017-02-23
+      </time>
+    
+    
+    | 
+    <a href='/tags/Linux/'>Linux</a>
+    
+    
+</span>
+    <h1 class="post-title">Linux netstat命令</h1>
+    <section class="post-content">
+      <p>Netstat 是一款命令行工具，可用于列出系统上所有的网络套接字连接情况，包括 tcp, udp 以及 unix 套接字，另外它还能列出处于监听状态（即等待接入请求）的套接字。如果你想确认系统上的 Web 服务有没有起来，你可以查看80端口有没有打开。以上功能使 netstat 成为网管和系统管理员的必备利器。</p>
+<p>下面通过实例介绍一下各参数的用法：</p>
+<h3 id="1、列出所有连接"><a href="#1、列出所有连接" class="headerlink" title="1、列出所有连接"></a>1、列出所有连接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">$ netstat -a</div><div class="line">Active Internet connections (including servers)</div><div class="line">Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)</div><div class="line">tcp4       0      0  10.70.102.187.61221    14.17.33.220.http-alt  ESTABLISHED</div><div class="line">tcp4       0      0  10.70.102.187.61216    14.17.33.220.http-alt  ESTABLISHED</div><div class="line">...</div><div class="line">udp4       0      0  *.56081                *.*</div><div class="line">udp6       0      0  *.60867                *.*</div><div class="line">...</div><div class="line">Active Multipath Internet connections</div><div class="line">Proto/ID  Flags      Local Address          Foreign Address        (state)</div><div class="line">icm6       0      0  *.*                    *.*</div><div class="line">Active LOCAL (UNIX) domain sockets</div><div class="line">Address          Type   Recv-Q Send-Q            Inode             Conn             Refs          Nextref Addr</div><div class="line">a64c790b5e982037 stream      0      0                0 a64c790b5e9819f7                0                0 /var/run/mDNSResponder</div></pre></td></tr></table></figure>
+<h3 id="2、只列出-TCP-或-UDP-协议的连接"><a href="#2、只列出-TCP-或-UDP-协议的连接" class="headerlink" title="2、只列出 TCP 或 UDP 协议的连接"></a>2、只列出 TCP 或 UDP 协议的连接</h3><p>使用 -t 选项列出 TCP 协议的连接：<br>使用 -u 选项列出 UDP 协议的连接：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">⇒ netstat -at</div><div class="line">Active Internet connections (including servers)</div><div class="line">Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)</div><div class="line">tcp4       0      0  192.168.1.103.52595    10.6.11.104.28901      SYN_SENT</div><div class="line">tcp4       0      0  192.168.1.103.52593    14.17.33.220.http-alt  ESTABLISHED</div><div class="line"> .....</div></pre></td></tr></table></figure></p>
+<h3 id="3、禁用反向域名解析，加快查询速度"><a href="#3、禁用反向域名解析，加快查询速度" class="headerlink" title="3、禁用反向域名解析，加快查询速度"></a>3、禁用反向域名解析，加快查询速度</h3><p>默认情况下 netstat 会通过反向域名解析技术查找每个 IP 地址对应的主机名。这会降低查找速度。如果你觉得 IP 地址已经足够，而没有必要知道主机名，就使用 -n 选项禁用域名解析功能。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">⇒ netstat -ant</div><div class="line">Active Internet connections (including servers)</div><div class="line">Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)</div><div class="line">tcp4       0      0  10.70.102.187.61295    14.17.33.220.8080      ESTABLISHED</div><div class="line">tcp4       0      0  10.70.102.187.61294    14.17.33.220.8080      ESTABLISHED</div><div class="line">tcp4       0      0  10.70.102.187.61284    14.17.33.220.80        SYN_SENT</div><div class="line">tcp6       0      0  *.4433                 *.*                    LISTEN</div></pre></td></tr></table></figure></p>
+<h3 id="4、只列出监听状态下的链接"><a href="#4、只列出监听状态下的链接" class="headerlink" title="4、只列出监听状态下的链接"></a>4、只列出监听状态下的链接</h3><p>任何网络服务的后台进程都会打开一个端口，用于监听接入的请求。这些正在监听的套接字也和连接的套接字一样，也能被 netstat 列出来。使用 -l 选项列出正在监听的套接字。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">ctive Internet connections</div><div class="line">Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)</div><div class="line">tcp4       0      0  192.168.1.103.53228    10.6.11.104.28901      SYN_SENT</div><div class="line">tcp4       0      0  192.168.1.103.53227    10.6.11.104.28901      SYN_SENT</div><div class="line">tcp4       0      0  192.168.1.103.53226    115.28.250.150.443     ESTABLISHED</div></pre></td></tr></table></figure></p>
+<p>现在我们可以看到处于监听状态的 TCP 端口和连接。如果你查看所有监听端口，去掉 -t 选项。如果你只想查看 UDP 端口，使用 -u 选项，代替 -t 选项。<br><em>注意：不要使用 -a 选项，否则 netstat 会列出所有连接，而不仅仅是监听端口。</em></p>
+<h3 id="5、获取进程名、进程号以及用户ID"><a href="#5、获取进程名、进程号以及用户ID" class="headerlink" title="5、获取进程名、进程号以及用户ID"></a>5、获取进程名、进程号以及用户ID</h3><p>查看端口和连接的信息时，能查看到它们对应的进程名和进程号对系统管理员来说是非常有帮助的。举个栗子，Apache 的 httpd 服务开启80端口，如果你要查看 http 服务是否已经启动，或者 http 服务是由 apache 还是 nginx 启动的，这时候你可以看看进程名。<br>使用 -p 选项查看进程信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo netstat -nlpt</div><div class="line">Active Internet connections (only servers)</div><div class="line">Proto Recv-Q Send-Q Local Address Foreign Address State PID/Program name</div><div class="line">tcp 0 0 127.0.1.1:53 0.0.0.0:* LISTEN 1144/dnsmasq</div><div class="line">tcp 0 0 127.0.0.1:631 0.0.0.0:* LISTEN 661/cupsd</div><div class="line">tcp6 0 0 ::1:631 :::* LISTEN 661/cupsd</div></pre></td></tr></table></figure></p>
+<p>使用 -p 选项时，netstat 必须运行在 root 权限之下，不然它就不能得到运行在 root 权限下的进程名，而很多服务包括 http 和 ftp 都运行在 root 权限之下。<br>相比进程名和进程号而言，查看进程的拥有者会更有用。使用 -ep 选项可以同时查看进程名和用户名。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$ sudo netstat -ltpe</div><div class="line">Active Internet connections (only servers)</div><div class="line">Proto Recv-Q Send-Q Local Address Foreign Address State User Inode PID/Program name</div><div class="line">tcp 0 0 enlightened:domain *:* LISTEN root 11090 1144/dnsmasq</div><div class="line">tcp 0 0 localhost:ipp *:* LISTEN root 9755 661/cupsd</div><div class="line">tcp6 0 0 ip6-localhost:ipp [::]:* LISTEN root 9754 661/cupsd</div></pre></td></tr></table></figure></p>
+<p>上面列出 TCP 协议下的监听套接字，同时显示进程信息和一些额外信息。<br>这些额外的信息包括用户名和进程的索引节点号。这个命令对网管来说很有用。<br><em>注意：假如你将 -n 和 -e 选项一起使用，User 列的属性就是用户的 ID 号，而不是用户名。</em></p>
+
+    </section>
+    <footer class="post-footer">
+      <section class="author">
+    <h4>BlackTimmy</h4>
+    <p>A designer, developer and entrepreneur. Spends his time travelling the world with a bag of kites. Likes journalism and publishing platforms.</p>
+</section>
+      <section class="share">
+    <h4>Share this post</h4>
+    <a class="icon-twitter" href="http://twitter.com/share?url=http://yoursite.com/2017/02/23/Linux-netstat命令/"
+       onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+        <span class="hidden">Twitter</span>
+    </a>
+    <a class="icon-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2017/02/23/Linux-netstat命令/"
+       onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+        <span class="hidden">Facebook</span>
+    </a>
+    <a class="icon-google-plus" href="https://plus.google.com/share?url=http://yoursite.com/2017/02/23/Linux-netstat命令/"
+       onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+        <span class="hidden">Google+</span>
+    </a>
+</section>
+    </footer>
+  </article>
+  <nav class="pagination" role="pagination">
+    
+    <a class="newer-posts" href="/2017/05/09/Mac日式键盘的问题/">
+        ← Mac日式键盘的问题
+    </a>
+    
+    <span class="page-number">•</span>
+    
+    <a class="older-posts" href="/2017/02/14/Mac端iTerms2实现“复制SSH渠道”/">
+        Mac端iTerms2实现“复制SSH渠道” →
+    </a>
+    
+</nav>
+  <div id="comment" class="comments-area">
+    <h1 class="title"><a href="#disqus_comments" name="disqus_comments">Comments</a></h1>
+
+    
+</div>
+</main>
+
+
+  
+<footer class="site-footer">
+  
+  <div class="inner">
+     <section class="copyright">All content copyright <a href="/">BlackTimmy</a> &copy; 2014 &bull; All rights reserved.</section>
+     <section class="poweredby">Proudly published with <a class="icon-ghost" href="http://zespia.tw/hexo/">Hexo</a></section>
+  </div>
+</footer>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+<script type="text/javascript" src="/js/index.js"></script>
+
+
+
+
+
+
+</body>
+</html>
